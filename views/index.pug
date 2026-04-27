@@ -1,0 +1,35 @@
+extends layout
+
+block content
+  .row
+    .col-12
+      h2.display-4= title
+      p.lead Witaj na stronie głównej!
+      
+      if user
+        .alert.alert-success(role="alert")
+          strong Zalogowany jako #{user.username}
+          if user.isAdmin
+            |  (Administrator)
+        
+        .row.mt-4
+          .col-md-6
+            .card.text-center
+              .card-body
+                h5.card-title 📚 Biblioteka
+                p.card-text Przeglądaj, dodawaj i zarządzaj książkami w naszej bibliotece.
+                a.btn.btn-primary(href="/books") Otwórz bibliotekę
+          
+          if user.isAdmin
+            .col-md-6
+              .card.text-center
+                .card-body
+                  h5.card-title 🛡️ Panel Administratora
+                  p.card-text Zarządzaj użytkownikami i uprawnieniami.
+                  a.btn.btn-warning(href="/admin") Otwórz panel
+      else
+        .alert.alert-info(role="alert")
+          | Nie jesteś zalogowany. 
+          a.alert-link(href="/auth/login") Zaloguj się
+          |  lub 
+          a.alert-link(href="/auth/register") zarejestruj

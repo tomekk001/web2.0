@@ -1,0 +1,48 @@
+extends layout
+
+block content
+  .row.justify-content-center
+    .col-md-6.col-lg-4
+      .card
+        .card-header
+          h2.card-title.mb-0 Logowanie
+        .card-body
+          form#loginForm
+            .mb-3
+              label.form-label Nazwa użytkownika:
+              input.form-control(type="text" name="username" required)
+            .mb-3
+              label.form-label Hasło:
+              input.form-control(type="password" name="password" required)
+            button.btn.btn-primary(type="submit") Zaloguj
+          .mt-3
+            p.mb-0 Nie masz konta? 
+              a(href="/auth/register") Zarejestruj się
+        .card-footer#messageContainer(style="display: none;")
+          .alert.alert-danger(role="alert")
+            span#messageText
+
+  script.
+    document.getElementById('loginForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData);
+
+      const response = await fetch('/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.token) {
+          document.cookie = `token=${result.token}; path=/; max-age=3600`;
+          window.location.href = '/';
+        }
+      } else {
+        const errorText = await response.text();
+        document.getElementById('messageText').textContent = errorText;
+        document.getElementById('messageContainer').style.display = 'block';
+      }
+    };

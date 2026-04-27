@@ -1,0 +1,76 @@
+extends ../layout
+
+block content
+  .row.justify-content-center
+    .col-md-8.col-lg-6
+      .card
+        .card-header
+          h2.card-title.mb-0= title
+        .card-body
+          if error
+            .alert.alert-danger(role="alert")= error
+
+          form(method="POST" action=isNew ? "/books" : `/books/${book._id}`)
+            .mb-3
+              label.form-label(for="title") Tytuł *
+              input.form-control#title(
+                type="text" 
+                name="title" 
+                value=book.title 
+                required
+              )
+
+            .mb-3
+              label.form-label(for="author") Autor *
+              input.form-control#author(
+                type="text" 
+                name="author" 
+                value=book.author 
+                required
+              )
+
+            .row
+              .col-md-6
+                .mb-3
+                  label.form-label(for="year") Rok wydania
+                  input.form-control#year(
+                    type="number" 
+                    name="year" 
+                    value=book.year || ''
+                    min="1000"
+                    max="2100"
+                  )
+
+              .col-md-6
+                .mb-3
+                  label.form-label(for="pages") Liczba stron
+                  input.form-control#pages(
+                    type="number" 
+                    name="pages" 
+                    value=book.pages || ''
+                    min="1"
+                  )
+
+            .mb-3
+              label.form-label(for="isbn") ISBN
+              input.form-control#isbn(
+                type="text" 
+                name="isbn" 
+                value=book.isbn || ''
+              )
+
+            .mb-3
+              label.form-label(for="description") Opis
+              textarea.form-control#description(
+                name="description" 
+                rows="5"
+              )= book.description || ''
+
+            .d-flex.gap-2
+              button.btn.btn-success(type="submit") 
+                if isNew
+                  | Dodaj książkę
+                else
+                  | Zapisz zmiany
+
+              a.btn.btn-secondary(href="/books") Anuluj

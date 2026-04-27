@@ -1,0 +1,41 @@
+extends ../layout
+
+block content
+  .row.justify-content-center
+    .col-md-8.col-lg-6
+      .card
+        .card-header
+          h2.card-title.mb-0= book.title
+        .card-body
+          .mb-3
+            label.fw-bold Autor:
+            p= book.author
+
+          if book.year
+            .mb-3
+              label.fw-bold Rok wydania:
+              p= book.year
+
+          if book.pages
+            .mb-3
+              label.fw-bold Liczba stron:
+              p= book.pages
+
+          if book.isbn
+            .mb-3
+              label.fw-bold ISBN:
+              p= book.isbn
+
+          if book.description
+            .mb-3
+              label.fw-bold Opis:
+              p= book.description
+
+          .text-muted.small
+            | Dodano: #{new Date(book.createdAt).toLocaleString('pl-PL')}
+
+        .card-footer
+          .d-flex.gap-2
+            a.btn.btn-info(href=`/books/${book._id}/edit`) Edytuj
+            a.btn.btn-danger(href=`/books/${book._id}/delete` onclick="return confirm('Czy na pewno chcesz usunąć?')") Usuń
+            a.btn.btn-secondary(href="/books") Wróć do listy

@@ -1,0 +1,67 @@
+extends layout
+
+block content
+  .row
+    .col-12
+      h2 Panel Administratora
+      .alert.alert-info(role="alert")
+        strong Zalogowany jako: #{currentUser.username}
+
+  .row
+    .col-md-6
+      h3 Dodawanie nowego użytkownika:
+      .card
+        .card-body
+          form(action="/admin/add-user" method="POST")
+            .mb-3
+              label.form-label(for="username") Login nowego użytkownika:
+              input.form-control#username(type="text" name="username" required)
+            .mb-3
+              label.form-label(for="password") Hasło nowego użytkownika:
+              input.form-control#password(type="password" name="password" required)
+            button.btn.btn-success(type="submit") Utwórz konto
+
+    .col-md-6
+      h3 Strony dostępne dla wszystkich
+      ul.list-group
+        li.list-group-item: a(href="/") Strona główna
+        li.list-group-item: a(href="/auth/login") Login - formularz logowania użytkowników
+
+      h3 Strony dostępne tylko dla zalogowanych
+      ul.list-group
+        li.list-group-item: a(href="/auth/logout") Logout - wylogowanie użytkownika ze strony
+        li.list-group-item: a(href="/change-password") Zmiana hasła - dla zalogowanych
+
+  .row.mt-4
+    .col-12
+      h3 Lista użytkowników aplikacji:
+      .table-responsive
+        table.table.table-striped
+          thead
+            tr
+              th Nazwa użytkownika
+              th Uprawnienia administratora
+              th Usuwanie użytkowników
+          tbody
+            each user in users
+              tr
+                td= user.username
+                td
+                  if user.id === currentUser.id
+                    | --
+                  else
+                    a.btn.btn-sm(href=`/admin/toggle-user-rights/${user.id}`)
+                      if user.isAdmin
+                        .badge.bg-success TRUE
+                      else
+                        .badge.bg-secondary FALSE
+                td
+                  if user.id === currentUser.id
+                    | --
+                  else
+                    a.btn.btn-sm.btn-danger(href=`/admin/delete-user/${user.id}`) Usuń
+          td
+            if user.id === currentUser.id
+              | --
+            else
+              a(href=`/admin/delete-user/${user.id}`) usuń użytkownika

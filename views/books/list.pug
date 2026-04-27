@@ -1,0 +1,41 @@
+extends ../layout
+
+block content
+  .row
+    .col-12
+      h2.mb-4 Biblioteka - Lista Książek
+      
+      .mb-3
+        a.btn.btn-primary(href="/books/new") 
+          i.bi.bi-plus-circle
+          |  Dodaj nową książkę
+
+      if books.length > 0
+        .table-responsive
+          table.table.table-striped.table-hover
+            thead.table-dark
+              tr
+                th Tytuł
+                th Autor
+                th Rok
+                th Strony
+                th ISBN
+                th Akcje
+            tbody
+              each book in books
+                tr
+                  td
+                    a(href=`/books/${book._id}`)= book.title
+                  td= book.author
+                  td= book.year || '-'
+                  td= book.pages || '-'
+                  td
+                    small= book.isbn || '-'
+                  td
+                    a.btn.btn-sm.btn-info(href=`/books/${book._id}/edit`) Edytuj
+                    |  
+                    a.btn.btn-sm.btn-danger(href=`/books/${book._id}/delete` onclick="return confirm('Czy na pewno chcesz usunąć?')") Usuń
+      else
+        .alert.alert-info(role="alert")
+          strong Brak książek
+          |  Biblioteka jest pusta. Dodaj nową książkę, aby rozpocząć.

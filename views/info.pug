@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  .row.justify-content-center
+    .col-md-8.col-lg-6
+      .alert.alert-info(role="alert")
+        h2.alert-heading= title
+        p= message
+        hr
+        p.mb-0
+          a.btn.btn-primary(href="/") ← Wróć do strony głównej

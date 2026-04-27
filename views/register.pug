@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  .row.justify-content-center
+    .col-md-6.col-lg-4
+      .card
+        .card-header
+          h2.card-title.mb-0 Rejestracja
+        .card-body
+          form(method="POST" action="/auth/register")
+            .mb-3
+              label.form-label(for="username") Nazwa użytkownika
+              input.form-control#username(type="text" name="username" required)
+            .mb-3
+              label.form-label(for="email") Adres e-mail
+              input.form-control#email(type="email" name="email" required)
+            .mb-3
+              label.form-label(for="password") Hasło
+              input.form-control#password(type="password" name="password" required)
+            button.btn.btn-primary(type="submit") Zarejestruj się
+          .mt-3
+            p.mb-0 Masz już konto? 
+              a(href="/auth/login") Zaloguj się
