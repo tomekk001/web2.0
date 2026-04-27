@@ -20,8 +20,7 @@ app.set('view engine', 'pug');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-mongoose.connect('mongodb://127.0.0.1:27017/web2_db')
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/web2_db')
   .then(() => console.log('Połączono z bazą MongoDB'))
   .catch(err => console.error('Błąd połączenia z bazą', err));
 
