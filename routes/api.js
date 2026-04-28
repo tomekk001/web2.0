@@ -3,7 +3,7 @@ const router = express.Router();
 const Book = require('../models/Book');
 const { verifyToken } = require('../middleware/authMiddleware');
 
-// Wszystkie endpointy API zabezpieczone tokenem JWT (zadanie 3)
+// Wszystkie endpointy API zabezpieczone tokenem JWT
 router.use(verifyToken);
 
 // GET /api/books – pobierz wszystkie książki

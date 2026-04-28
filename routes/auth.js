@@ -21,7 +21,7 @@ router.post('/register', async (req, res) => {
             return res.status(400).send('Użytkownik o takiej nazwie lub adresie e-mail już istnieje.');
         }
 
-        // Generujemy unikalny token aktywacyjny
+        // generowanie tokenu
         const activationToken = crypto.randomBytes(32).toString('hex');
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -34,13 +34,12 @@ router.post('/register', async (req, res) => {
         });
         await newUser.save();
 
-        // Budujemy link aktywacyjny
+        // link aktywacyjny
         const activationLink = `${process.env.APP_URL || 'http://localhost:3000'}/auth/activate/${activationToken}`;
 
-        // Wysyłamy e-mail
+        // wysyłnie e-mail
         await sendActivationEmail(email, activationLink);
 
-        // Zamiast przekierowania – informujemy użytkownika
         res.render('info', {
             title: 'Sprawdź swoją skrzynkę',
             message: `Na adres ${email} wysłaliśmy link aktywacyjny. Sprawdź pocztę i kliknij w link, aby aktywować konto.`,
@@ -66,7 +65,6 @@ router.post('/login', async (req, res) => {
             return res.status(401).send('Nieprawidłowa nazwa użytkownika lub hasło.');
         }
 
-        // Sprawdzamy, czy konto jest aktywne
         if (!user.isActive) {
             return res.status(403).send('Konto nie zostało jeszcze aktywowane. Sprawdź swoją skrzynkę e-mail i kliknij link aktywacyjny.');
         }
@@ -77,15 +75,14 @@ router.post('/login', async (req, res) => {
             { expiresIn: '1h' }
         );
         
-        // Zapisujemy ciasteczko (to nie kończy odpowiedzi)
+        // Zapisujemy ciasteczko
         res.cookie('token', token, { httpOnly: true });
 
-        // Wysyłamy JSON z tokenem dla AJAX
+        // JSON z tokenem dla AJAX
         res.json({ 
             message: 'Zalogowano pomyślnie!', 
-            token: token,
-            instrukcja: 'Skopiuj powyższy token i użyj go w Postmanie w nagłówku Authorization jako "Bearer <twoj_token>"'
-        });
+            token: token
+           });
 
     } catch (err) {
         return res.status(500).send('Wystąpił błąd podczas logowania.');
@@ -112,7 +109,7 @@ router.get('/activate/:token', async (req, res) => {
             });
         }
 
-        // Aktywujemy konto i usuwamy token
+        // aktywacja konta i usunięcie tokenu
         user.isActive = true;
         user.activationToken = null;
         await user.save();
